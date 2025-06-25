@@ -21,24 +21,63 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 
 # In-memory activity database
 activities = {
-   "Clube de Xadrez": {
-      "description": "Aprenda estratégias e participe de torneios de xadrez",
-      "schedule": "Sextas, 15h30 - 17h",
-      "max_participants": 12,
-      "participants": ["michael@mergington.edu", "daniel@mergington.edu"]
-   },
-   "Aula de Programação": {
-      "description": "Aprenda fundamentos de programação e desenvolva projetos de software",
-      "schedule": "Terças e quintas, 15h30 - 16h30",
-      "max_participants": 20,
-      "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
-   },
-   "Educação Física": {
-      "description": "Educação física e atividades esportivas",
-      "schedule": "Segundas, quartas e sextas, 14h - 15h",
-      "max_participants": 30,
-      "participants": ["john@mergington.edu", "olivia@mergington.edu"]
-   }
+    "Clube de Xadrez": {
+        "description": "Aprenda estratégias e participe de torneios de xadrez",
+        "schedule": "Sextas, 15h30 - 17h",
+        "max_participants": 12,
+        "participants": ["michael@mergington.edu", "daniel@mergington.edu"]
+    },
+    "Aula de Programação": {
+        "description": "Aprenda fundamentos de programação e desenvolva projetos de software",
+        "schedule": "Terças e quintas, 15h30 - 16h30",
+        "max_participants": 20,
+        "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
+    },
+    "Educação Física": {
+        "description": "Educação física e atividades esportivas",
+        "schedule": "Segundas, quartas e sextas, 14h - 15h",
+        "max_participants": 30,
+        "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    # Esportivas
+    "Futebol": {
+        "description": "Treinamento e partidas de futebol para todos os níveis",
+        "schedule": "Terças e quintas, 16h - 17h30",
+        "max_participants": 22,
+        "participants": ["lucas@mergington.edu", "marcos@mergington.edu"]
+    },
+    "Vôlei": {
+        "description": "Aulas e jogos de vôlei para iniciantes e avançados",
+        "schedule": "Quartas e sextas, 15h - 16h30",
+        "max_participants": 14,
+        "participants": ["ana@mergington.edu", "carla@mergington.edu"]
+    },
+    # Artísticas
+    "Teatro": {
+        "description": "Expressão artística e atuação em peças teatrais",
+        "schedule": "Segundas e quartas, 16h - 17h30",
+        "max_participants": 18,
+        "participants": ["paulo@mergington.edu", "juliana@mergington.edu"]
+    },
+    "Oficina de Pintura": {
+        "description": "Aulas de pintura e técnicas de arte",
+        "schedule": "Sábados, 10h - 12h",
+        "max_participants": 15,
+        "participants": ["lara@mergington.edu", "renato@mergington.edu"]
+    },
+    # Intelectuais
+    "Clube de Leitura": {
+        "description": "Discussão de livros e incentivo à leitura",
+        "schedule": "Quartas, 17h - 18h",
+        "max_participants": 16,
+        "participants": ["camila@mergington.edu", "gustavo@mergington.edu"]
+    },
+    "Olimpíada de Matemática": {
+        "description": "Preparação para olimpíadas e desafios matemáticos",
+        "schedule": "Sábados, 9h - 11h",
+        "max_participants": 25,
+        "participants": ["bruno@mergington.edu", "aline@mergington.edu"]
+    }
 }
 
 
@@ -62,6 +101,10 @@ def signup_for_activity(activity_name: str, email: str):
     # Get the specificy activity
     activity = activities[activity_name]
 
+    # Validar se o estudante já está inscrito
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail=f"{email} já está inscrito(a) em {activity_name}")
+    
     # Add student
     activity["participants"].append(email)
     return {"message": f"{email} inscrito(a) em {activity_name} com sucesso"}
